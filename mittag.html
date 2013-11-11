@@ -1,0 +1,82 @@
+<head>
+  <title>mittag</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="small-12 columns">
+            {{loginButtons align="right"}}
+            <h1>Was ist mit Mittagessen?</h1>
+        </div>
+        <div class="small-9 columns">
+            {{> vendorSelection }}
+        </div>
+        <div class="small-3 columns">
+            {{> userInfo }}
+            <h4 class="subheader">Weitere Fressstätten</h4>
+            {{> vendorNomination }}
+        </div>
+    </div>
+
+</body>
+
+<template name="admin">
+
+</template>
+
+<template name="vendorSelection">
+    <ul class="small-block-grid-1 large-block-grid-3">
+    {{#each nominatedVendors}}
+        <li>
+            <h3>{{name}}</h3>
+            <ol>
+                {{#each participants}}
+                    <li>{{profile.name}}</li>
+                {{/each}}
+            </ol>
+
+            {{#if user}}
+                {{#if thisVendorSelected}}
+                    <button class="small alert" data-action="deselect">Ich will da doch nicht essen!</button>
+                {{else}}
+                    {{#unless anyVendorSelected}}
+                        <button class="small" data-action="select">Ich will da essen!</button>
+                    {{/unless}}
+                {{/if}}
+            {{else}}
+                <span data-tooltip class="has-tip small button disabled" title="Bitte einloggen!">
+                    Ich will da essen!
+                </span>
+            {{/if}}
+
+        </li>
+    {{/each}}
+    </ul>
+</template>
+
+<template name="userInfo">
+    <h4 class="subheader">Aktive User</h4>
+    <ul class="inline-list">
+    {{#each onlineUsers}}
+        <li>{{profile.name}}</li>
+    {{/each}}
+    </ul>
+</template>
+
+<template name="vendorNomination">
+    {{#each vendors}}
+        <h5>{{name}}</h5>
+        {{#if url}}
+            <a href="{{url}}">{{url}}</a>
+        {{/if}}
+        {{#if nominated}}
+            <button class="tiny" disabled>Bereits nomitiert</button>
+        {{else}}
+            <button class="tiny" data-action="nominate">nominieren</button>
+        {{/if}}
+    {{/each}}
+    <h4 class="subheader">Neue Fressstätte</h4>
+    <form class="new-vendor">
+        <input type="text" id="new-vendor-name" placeholder="Name der Fressstätte" />
+    </form>
+</template>

@@ -1,0 +1,21 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "user-status": {},
+      "foundation": {}
+    },
+    "packages": {
+      "user-status": {
+        "git": "https://github.com/mizzao/meteor-user-status.git",
+        "tag": "v0.1.5",
+        "commit": "0169a468e57155f1d61fc2b1cd76bc9ca51c7313"
+      },
+      "foundation": {
+        "git": "https://github.com/ewall/meteor-foundation.git",
+        "tag": "v4.3.2",
+        "commit": "4cd0dc6ac5c69bf7477917a836d9078262d273a0"
+      }
+    }
+  }
+}
