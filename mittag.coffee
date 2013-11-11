@@ -1,10 +1,18 @@
-Vendors = new Meteor.Collection("vendors");
+Vendors = new Meteor.Collection("vendors")
+VENDOR_TIMEOUT = 60*1000
 
 if Meteor.isClient
+  Meteor.call 'getEnvironment', (error, result)->
+    Session.set 'environment', result
+  isAdmin = ->
+    Meteor.user()?.profile.admin
+
+  Handlebars.registerHelper "isAdmin", isAdmin
+  Handlebars.registerHelper "environment", ->
+    Session.get 'environment'
+
   Template.vendorSelection.nominatedVendors = ->
     Vendors.find({nominated: true})
-
-  Template.vendorSelection.user = -> Meteor.user()
 
   Template.vendorSelection.anyVendorSelected = ->
     Session.get('selectedVendor')?
@@ -30,7 +38,7 @@ if Meteor.isClient
   Template.vendorNomination.events(
     'submit .new-vendor': (e)->
       e.preventDefault()
-      Vendors.insert name: $(e.currentTarget).find('input').val(), nominated: true
+      Vendors.insert name: $(e.currentTarget).find('input').val(), nominated: true, participants: []
 
   )
   Template.vendorNomination.events(
@@ -53,10 +61,27 @@ if Meteor.isServer
       for name in names
         Vendors.insert name: name, nominated: false
 
+    if Meteor.call('getEnvironment') == 'development'
+      Meteor.users.find().forEach (user)->
+        Meteor.users.update(user._id, $set: { 'profile.admin': true })
+
+    # observe nominations without participants
+    Vendors.find({nominated: true, participants: {$size: 0}}).observe(
+      added: (vendor)->
+        token = Random.id()
+        console.log "watching #{vendor.name} (#{token}), will denominate in 60s unless someone participates"
+        Vendors.update vendor._id, $set: { watched_at: new Date(), watch_token: token }
+        Meteor.setTimeout(->
+          console.log "denominate #{vendor.name} (#{token}) after 60s"
+          Vendors.update { _id: vendor._id, watch_token: token, participants: { $size: 0 }}, $set: { nominated: false }
+        , VENDOR_TIMEOUT)
+    )
+
   Meteor.methods(
-    getEnvironment: 
-      if(process.env.ROOT_URL == "http://localhost:3000")
+    getEnvironment: ->
+      if(process.env.ROOT_URL == "http://localhost:3000/")
         "development"
       else
-        "staging"
+        "production"
   )
+

@@ -3,6 +3,9 @@
 </head>
 
 <body>
+    {{#if isAdmin}}
+        {{> admin}}
+    {{/if}}
     <div class="row">
         <div class="small-12 columns">
             {{loginButtons align="right"}}
@@ -21,7 +24,13 @@
 </body>
 
 <template name="admin">
-
+    <nav class="top-bar">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a href="/">admin {{environment}}</a></h1>
+            </li>
+        </ul>
+    </nav>
 </template>
 
 <template name="vendorSelection">
@@ -35,7 +44,7 @@
                 {{/each}}
             </ol>
 
-            {{#if user}}
+            {{#if currentUser}}
                 {{#if thisVendorSelected}}
                     <button class="small alert" data-action="deselect">Ich will da doch nicht essen!</button>
                 {{else}}
@@ -70,7 +79,7 @@
             <a href="{{url}}">{{url}}</a>
         {{/if}}
         {{#if nominated}}
-            <button class="tiny" disabled>Bereits nomitiert</button>
+            <button class="tiny" disabled>bereits nomitiert</button>
         {{else}}
             <button class="tiny" data-action="nominate">nominieren</button>
         {{/if}}
