@@ -13,15 +13,32 @@
         </div>
         <div class="small-12 large-9 columns">
             {{> vendorSelection }}
+            {{> chat}}
         </div>
         <div class="small-12 large-3 columns">
             {{> userInfo }}
             <h4 class="subheader">Weitere Fressstätten</h4>
             {{> vendorNomination }}
         </div>
+
     </div>
 
 </body>
+
+<template name="chat">
+    <div class="messages">
+        {{#each messages}}
+            <div class="message">
+                [{{time}}] {{name}}: {{body}}
+            </div>
+        {{/each}}
+    </div>
+    {{#if currentUser}}
+        <form class="new-message">
+            <input type="text" id="new-message" placeholder="Nachricht schreiben..." />
+        </form>
+    {{/if}}
+</template>
 
 <template name="admin">
     <nav class="top-bar">

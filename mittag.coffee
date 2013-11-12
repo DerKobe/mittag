@@ -1,4 +1,5 @@
 Vendors = new Meteor.Collection("vendors")
+Messages = new Meteor.Collection("messages")
 VENDOR_TIMEOUT = 60*1000
 
 if Meteor.isClient
@@ -29,6 +30,29 @@ if Meteor.isClient
       Vendors.update @_id, $pull: { participants: { _id: Meteor.userId() } }
       Session.set 'selectedVendor', null
   )
+
+  Template.chat.messages = ->
+    Messages.find({})
+
+  Template.chat.time = ->
+    "#{@created_at.getHours()}:#{@created_at.getMinutes()}"
+
+  Template.chat.events(
+    'submit .new-message': (e)->
+      e.preventDefault()
+      Messages.insert name: Meteor.user().profile.name, created_at: new Date(), body: $(e.currentTarget).find('input').val()
+      $(e.currentTarget).find('input').val('')
+  )
+
+  Messages.find({}).observe(
+    added: ->
+      el = $('.messages')[0]
+      if el
+        setTimeout(->
+          el.scrollTop = el.scrollHeight
+        , 50)
+  )
+
 
 
 

@@ -3,3 +3,8 @@
     float: right;
     margin-top: 50px;
 }
+
+.messages {
+    height: 250px;
+    overflow: auto;
+}
