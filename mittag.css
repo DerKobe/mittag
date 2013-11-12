@@ -8,3 +8,7 @@
     height: 250px;
     overflow: auto;
 }
+
+.message {
+    margin: 2px 0;
+}
