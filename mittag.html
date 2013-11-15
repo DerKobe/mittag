@@ -60,7 +60,7 @@
     <ul class="small-block-grid-1 large-block-grid-2">
     {{#each nominatedVendors}}
         <li>
-            <h3>{{name}}{{#unless participants}} <a href="#" data-action="denominate">X</a>{{/unless}}</h3>
+            <h3>{{name}}</h3>
             {{#if participants}}
                 <ol>
                     {{#each participants}}
@@ -98,7 +98,7 @@
 
 <template name="vendorNomination">
     {{#each vendors}}
-        <button class="vendor" {{#if nominated}}disabled{{else}}data-action="nominate"{{/if}}>{{name}}</button>
+        <button class="vendor expand" {{#if nominated}}disabled{{else}}data-action="nominate"{{/if}}>{{name}}</button>
     {{/each}}
     <h4 class="subheader">Neue Fressstätte</h4>
     <form class="new-vendor">
