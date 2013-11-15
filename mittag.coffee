@@ -1,5 +1,5 @@
-Vendors = new Meteor.Collection("vendors")
-Messages = new Meteor.Collection("messages")
+Vendors = new Meteor.Collection('vendors')
+Messages = new Meteor.Collection('messages')
 VENDOR_TIMEOUT = 60*1000
 
 if Meteor.isClient
@@ -8,12 +8,12 @@ if Meteor.isClient
   isAdmin = ->
     Meteor.user()?.profile.admin
 
-  Handlebars.registerHelper "isAdmin", isAdmin
-  Handlebars.registerHelper "environment", ->
+  Handlebars.registerHelper 'isAdmin', isAdmin
+  Handlebars.registerHelper 'environment', ->
     Session.get 'environment'
 
   Template.vendorSelection.nominatedVendors = ->
-    Vendors.find({nominated: true})
+    Vendors.find(nominated: true)
 
   Template.vendorSelection.anyVendorSelected = ->
     Session.get('selectedVendor')?
@@ -29,13 +29,18 @@ if Meteor.isClient
     'click [data-action=deselect]': ->
       Vendors.update @_id, $pull: { participants: { _id: Meteor.userId() } }
       Session.set 'selectedVendor', null
+
+    'click [data-action=denominate]': ->
+      Vendors.update @_id, $set: { nominated: false }
   )
 
   Template.chat.messages = ->
-    Messages.find({})
+    Messages.find {}, { sort: { created_at: -1 } }
 
   Template.chat.time = ->
-    "#{@created_at.getHours()}:#{@created_at.getMinutes()}"
+    minutes = @created_at.getMinutes()
+    minutes = "0#{minutes}" if "#{minutes}".length < 2
+    "#{@created_at.getHours()}:#{minutes}"
 
   Template.chat.events(
     'submit .new-message': (e)->
@@ -44,17 +49,9 @@ if Meteor.isClient
       $(e.currentTarget).find('input').val('')
   )
 
-  Messages.find({}).observe(
-    added: ->
-      el = $('.messages')[0]
-      if el
-        setTimeout(->
-          el.scrollTop = el.scrollHeight
-        , 50)
+  Template.chat.helpers(
+    firstNameOf: (name)-> name.split(' ')[0]
   )
-
-
-
 
   Template.vendorNomination.vendors = ->
     Vendors.find()
@@ -73,6 +70,15 @@ if Meteor.isClient
   Template.userInfo.onlineUsers = ->
     Meteor.users.find("profile.online": true)
 
+  Messages.find().observe(
+    added: ->
+      el = $('.messages')[0]
+      if el
+        setTimeout(->
+          el.scrollTop = el.scrollHeight
+        , 50)
+  )
+
   jQuery ->
     $(document).foundation();
 
@@ -90,7 +96,7 @@ if Meteor.isServer
         Meteor.users.update(user._id, $set: { 'profile.admin': true })
 
     # observe nominations without participants
-    Vendors.find({nominated: true, participants: {$size: 0}}).observe(
+    Vendors.find(nominated: true, participants: { $size: 0 }).observe(
       added: (vendor)->
         token = Random.id()
         console.log "watching #{vendor.name} (#{token}), will denominate in 60s unless someone participates"

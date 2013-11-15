@@ -1,5 +1,5 @@
 <head>
-  <title>mittag</title>
+  <title>Mittag</title>
 </head>
 
 <body>
@@ -7,14 +7,17 @@
         {{> admin}}
     {{/if}}
     <div class="row">
+
         <div class="small-12 columns">
             {{loginButtons align="right"}}
             <h1>Was ist mit Mittagessen?</h1>
         </div>
+
         <div class="small-12 large-9 columns">
             {{> vendorSelection }}
             {{> chat}}
         </div>
+
         <div class="small-12 large-3 columns">
             {{> userInfo }}
             <h4 class="subheader">Weitere Fressstätten</h4>
@@ -22,22 +25,25 @@
         </div>
 
     </div>
-
 </body>
 
 <template name="chat">
-    <div class="messages">
-        {{#each messages}}
-            <div class="message">
-                [{{time}}] {{name}}: {{body}}
-            </div>
-        {{/each}}
-    </div>
     {{#if currentUser}}
         <form class="new-message">
             <input type="text" id="new-message" placeholder="Nachricht schreiben..." />
         </form>
     {{/if}}
+    <table class="messages">
+        <tbody>
+            {{#each messages}}
+                <tr>
+                    <td class="time">{{time}}</td>
+                    <td class="name">{{firstNameOf name}}</td>
+                    <td class="body">{{body}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </template>
 
 <template name="admin">
@@ -54,12 +60,14 @@
     <ul class="small-block-grid-1 large-block-grid-2">
     {{#each nominatedVendors}}
         <li>
-            <h3>{{name}}</h3>
-            <ol>
-                {{#each participants}}
-                    <li>{{profile.name}}</li>
-                {{/each}}
-            </ol>
+            <h3>{{name}}{{#unless participants}} <a href="#" data-action="denominate">X</a>{{/unless}}</h3>
+            {{#if participants}}
+                <ol>
+                    {{#each participants}}
+                        <li>{{profile.name}}</li>
+                    {{/each}}
+                </ol>
+            {{/if}}
 
             {{#if currentUser}}
                 {{#if thisVendorSelected}}
@@ -74,7 +82,6 @@
                     Ich will da essen!
                 </span>
             {{/if}}
-
         </li>
     {{/each}}
     </ul>
@@ -91,15 +98,7 @@
 
 <template name="vendorNomination">
     {{#each vendors}}
-        <h5>{{name}}</h5>
-        {{#if url}}
-            <a href="{{url}}">{{url}}</a>
-        {{/if}}
-        {{#if nominated}}
-            <button class="tiny" disabled>bereits nomitiert</button>
-        {{else}}
-            <button class="tiny" data-action="nominate">nominieren</button>
-        {{/if}}
+        <button class="vendor" {{#if nominated}}disabled{{else}}data-action="nominate"{{/if}}>{{name}}</button>
     {{/each}}
     <h4 class="subheader">Neue Fressstätte</h4>
     <form class="new-vendor">
