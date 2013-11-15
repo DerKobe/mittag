@@ -98,7 +98,7 @@
 
 <template name="vendorNomination">
     {{#each vendors}}
-        <button class="vendor expand" {{#if nominated}}disabled{{else}}data-action="nominate"{{/if}}>{{name}}</button>
+        <button class="vendor expand" {{#if isNominated}}disabled{{else}}data-action="nominate"{{/if}}>{{name}}</button>
     {{/each}}
     <h4 class="subheader">Neue Fressstätte</h4>
     <form class="new-vendor">

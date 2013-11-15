@@ -10,7 +10,7 @@ Meteor.startup ->
     names = ["Pizza Bonn", "Magd und Knecht"]
 
     for name in names
-      Vendors.insert name: name, nominated: false
+      Vendors.insert name: name, nominated_at: null
 
   if environment() == 'development'
     Meteor.users.find().forEach (user)->

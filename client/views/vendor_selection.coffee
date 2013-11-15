@@ -1,5 +1,5 @@
 Template.vendorSelection.nominatedVendors = ->
-  Vendors.find(nominated: true)
+  Vendors.find(nominated_at: { $exists: true })
 
 Template.vendorSelection.anyVendorSelected = ->
   Session.get('selectedVendor')?
@@ -15,7 +15,4 @@ Template.vendorSelection.events(
   'click [data-action=deselect]': ->
     Meteor.call 'deselectVendor', @_id
     Session.set 'selectedVendor', null
-
-  'click [data-action=denominate]': ->
-    Vendors.update @_id, $set: { nominated: false }
 )
