@@ -45,8 +45,9 @@ if Meteor.isClient
   Template.chat.events(
     'submit .new-message': (e)->
       e.preventDefault()
-      Messages.insert name: Meteor.user().profile.name, created_at: new Date(), body: $(e.currentTarget).find('input').val()
-      $(e.currentTarget).find('input').val('')
+      $input = $(e.currentTarget).find('input')
+      Messages.insert name: Meteor.user().profile.name, created_at: new Date(), body: $input.val()
+      $input.val('')
   )
 
   Template.chat.helpers(
@@ -59,7 +60,9 @@ if Meteor.isClient
   Template.vendorNomination.events(
     'submit .new-vendor': (e)->
       e.preventDefault()
-      Vendors.insert name: $(e.currentTarget).find('input').val(), nominated: true, participants: []
+      $input = $(e.currentTarget).find('input')
+      Vendors.insert name: $input.val(), nominated: true, participants: []
+      $input.val('')
 
   )
   Template.vendorNomination.events(
