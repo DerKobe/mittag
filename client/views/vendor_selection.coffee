@@ -9,11 +9,11 @@ Template.vendorSelection.thisVendorSelected = ->
 
 Template.vendorSelection.events(
   'click [data-action=select]': ->
-    Vendors.update @_id, $addToSet: { participants: Meteor.user() }
+    Meteor.call 'selectVendor', @_id
     Session.set 'selectedVendor', @
 
   'click [data-action=deselect]': ->
-    Vendors.update @_id, $pull: { participants: { _id: Meteor.userId() } }
+    Meteor.call 'deselectVendor', @_id
     Session.set 'selectedVendor', null
 
   'click [data-action=denominate]': ->
