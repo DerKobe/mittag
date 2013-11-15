@@ -20,6 +20,9 @@
 .messages .name {
     width: 1%;
 }
+.messages .time {
+    text-align: right;
+}
 
 /*.messages .tr p:nth-child(2)*/
 
