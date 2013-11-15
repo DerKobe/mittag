@@ -15,8 +15,6 @@ Meteor.call 'getEnvironment', (error, result)->
   Session.set 'environment', result
 
 Handlebars.registerHelper 'isAdmin', isAdmin
-Handlebars.registerHelper 'environment', ->
-  Session.get 'environment'
 
 Template.userInfo.onlineUsers = ->
   Meteor.users.find("profile.online": true)
