@@ -1,27 +1,20 @@
 @Vendors = new Meteor.Collection('vendors')
 @Messages = new Meteor.Collection('messages')
 
-if Meteor.isClient
-  Meteor.call 'getEnvironment', (error, result)->
-    Session.set 'environment', result
-  isAdmin = ->
-    Meteor.user()?.profile.admin
+Meteor.subscribe('vendors')
+Meteor.subscribe('messages')
 
-  Handlebars.registerHelper 'isAdmin', isAdmin
-  Handlebars.registerHelper 'environment', ->
-    Session.get 'environment'
+Meteor.call 'getEnvironment', (error, result)->
+  Session.set 'environment', result
+isAdmin = ->
+  Meteor.user()?.profile.admin
 
-  Template.userInfo.onlineUsers = ->
-    Meteor.users.find("profile.online": true)
+Handlebars.registerHelper 'isAdmin', isAdmin
+Handlebars.registerHelper 'environment', ->
+  Session.get 'environment'
 
-  Messages.find().observe(
-    added: ->
-      el = $('.messages')[0]
-      if el
-        setTimeout(->
-          el.scrollTop = el.scrollHeight
-        , 50)
-  )
+Template.userInfo.onlineUsers = ->
+  Meteor.users.find("profile.online": true)
 
-  jQuery ->
-    $(document).foundation();
+jQuery ->
+  $(document).foundation();

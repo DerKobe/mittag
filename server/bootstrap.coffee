@@ -1,5 +1,4 @@
 Meteor.startup ->
-  console.log "startup"
   # code to run on server at startup
   if Vendors.find().count() == 0
     names = ["Pizza Bonn", "Magd und Knecht"]
@@ -10,6 +9,8 @@ Meteor.startup ->
   if Meteor.call('getEnvironment') == 'development'
     Meteor.users.find().forEach (user)->
       Meteor.users.update(user._id, $set: { 'profile.admin': true })
+
+  VENDOR_TIMEOUT = 60*1000
 
   # observe nominations without participants
   Vendors.find(nominated: true, participants: { $size: 0 }).observe(

@@ -1,6 +1,11 @@
 @Vendors = new Meteor.Collection('vendors')
 @Messages = new Meteor.Collection('messages')
-@VENDOR_TIMEOUT = 60*1000
+
+Meteor.publish 'vendors', ->
+  return Vendors.find({})
+
+Meteor.publish 'messages', ->
+  return Messages.find({}, { limit: 100 })
 
 Meteor.methods(
   getEnvironment: ->
@@ -8,4 +13,13 @@ Meteor.methods(
       "development"
     else
       "production"
+
+  nominateVendor: (vendorId)->
+    console.log "nominateVendor #{vendorId}"
+    Vendors.update vendorId, $set: { nominated: true}
+)
+
+Messages.allow(
+  insert: (userId, message)->
+    true
 )

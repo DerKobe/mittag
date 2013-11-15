@@ -11,5 +11,5 @@ Template.vendorNomination.events(
 )
 Template.vendorNomination.events(
   'click [data-action=nominate]': ->
-    Vendors.update @_id, $set: { nominated: true }
+    Meteor.call 'nominateVendor', @_id
 )

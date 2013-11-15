@@ -1,5 +1,5 @@
 Template.chat.messages = ->
-  Messages.find {}, { sort: { created_at: -1 }, limit: 100 }
+  Messages.find({}, sort: { created_at: -1 })
 
 Template.chat.time = ->
   minutes = @created_at.getMinutes()
