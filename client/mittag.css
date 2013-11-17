@@ -1,4 +1,3 @@
-/* CSS declarations go here */
 .login-buttons-dropdown-align-right {
     float: right;
     margin-top: 50px;
@@ -13,6 +12,12 @@
 .messages tr {
     border-bottom: 1px solid lightgrey;
 }
+.messages tr.error {
+    background-color: #ffc1c1;
+}
+.messages tr.hint {
+    background-color: #d0deff;
+}
 .messages td {
     vertical-align: top;
 }
@@ -23,8 +28,6 @@
 .messages .time {
     text-align: right;
 }
-
-/*.messages .tr p:nth-child(2)*/
 
 button.vendor {
   margin-bottom: 5px;

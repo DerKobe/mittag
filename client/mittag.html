@@ -36,7 +36,7 @@
     <table class="messages">
         <tbody>
             {{#each messages}}
-                <tr>
+                <tr{{#if type}} class="{{type}}"{{/if}}>
                     <td class="time">{{time}}</td>
                     <td class="name">{{firstNameOf name}}</td>
                     <td class="body">{{body}}</td>
