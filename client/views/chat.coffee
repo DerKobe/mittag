@@ -1,5 +1,7 @@
 Template.chat.messages = ->
-  Messages.find({}, { sort: { created_at: -1 } })
+  Messages.find({}, { sort: { created_at: -1 } }).map (msg)->
+    msg.body= msg.body.split("\n")
+    msg
 
 Template.chat.time = ->
   minutes = @created_at.getMinutes()
@@ -39,6 +41,12 @@ handleCommand = (command)->
       # show a flashy hint noone will overlook
       message = command.replace(/^\/hint/,'').replace(/^\/h/,'').replace(/^[ \t]+/,'')
       Messages.insert name: 'ACHTUNG', created_at: new Date(), body: message, type: 'hint'
+
+    else if command == '/?' || command == '/help'
+      Messages.insert name: 'HILFE', created_at: new Date(), body: "/c, /clear - Chatverlauf löschen\n/h [text], /hint [text] - [text] als auffälligen Hinweis darstellen\n/r [name], /remove [name] - die Fressstätte [name] entfernen\n/?, /help - verfügbare Befehle auflisten", privateFor: Meteor.user()._id, type: 'help'
+
+    else if command.substring(0,3) == '/r ' || command.substring(0,8) == '/remove '
+      Meteor.call 'removeVendor', command.replace(/^\/remove/,'').replace(/^\/r/,'').replace(/^[ \t]+/,'')
 
     else
       # unknown command

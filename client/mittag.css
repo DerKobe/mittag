@@ -18,8 +18,14 @@
 .messages tr.hint {
     background-color: #d0deff;
 }
+.messages tr.help {
+    background-color: #fff8be;
+}
 .messages td {
     vertical-align: top;
+}
+.messages td p {
+    margin: 0;
 }
 .messages .time,
 .messages .name {

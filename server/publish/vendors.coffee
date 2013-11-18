@@ -16,6 +16,8 @@ Meteor.methods(
     Vendors.update vendorId, $addToSet: { participants: Meteor.user() }
   deselectVendor: (vendorId)->
     Vendors.update vendorId, $pull: { participants: { _id: Meteor.userId() } }
+  removeVendor: (name)->
+    Vendors.remove { name: name } if Meteor.user()?.profile.admin
 )
 
 Meteor.startup ->

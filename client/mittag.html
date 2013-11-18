@@ -37,9 +37,9 @@
         <tbody>
             {{#each messages}}
                 <tr{{#if type}} class="{{type}}"{{/if}}>
-                    <td class="time">{{time}}</td>
-                    <td class="name">{{firstNameOf name}}</td>
-                    <td class="body">{{body}}</td>
+                    <td class="time"><p>{{time}}</p></td>
+                    <td class="name"><p>{{firstNameOf name}}</p></td>
+                    <td class="body">{{#each body}}<p>{{this}}</p>{{/each}}</td>
                 </tr>
             {{/each}}
         </tbody>
