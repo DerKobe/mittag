@@ -12,12 +12,18 @@ Vendors.allow(
 Meteor.methods(
   nominateVendor: (vendorId)->
     Vendors.update vendorId, $set: { nominated_at: new Date() }
+
   selectVendor: (vendorId)->
     Vendors.update vendorId, $addToSet: { participants: Meteor.user() }
+
   deselectVendor: (vendorId)->
     Vendors.update vendorId, $pull: { participants: { _id: Meteor.userId() } }
+
   removeVendor: (name)->
     Vendors.remove { name: name } if Meteor.user()?.profile.admin
+
+  resetParticipants: ->
+    Vendors.update {}, $set: { participants: [] }, { multi: true }
 )
 
 Meteor.startup ->

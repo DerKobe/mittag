@@ -33,7 +33,7 @@ handleCommand = (command)->
   # distinguish between admin only commands and the ones everybody can use
   if Meteor.user()?.profile.admin
     command = command.replace(/[ \t]+$/,'')
-    if command == '/c' || command == '/clear'
+    if command == '/clear'
       # clear chat history
       Meteor.call 'clearChat'
 
@@ -43,10 +43,13 @@ handleCommand = (command)->
       Messages.insert name: 'ACHTUNG', created_at: new Date(), body: message, type: 'hint'
 
     else if command == '/?' || command == '/help'
-      Messages.insert name: 'HILFE', created_at: new Date(), body: "/c, /clear - Chatverlauf löschen\n/h [text], /hint [text] - [text] als auffälligen Hinweis darstellen\n/r [name], /remove [name] - die Fressstätte [name] entfernen\n/?, /help - verfügbare Befehle auflisten", privateFor: Meteor.user()._id, type: 'help'
+      Messages.insert name: 'HILFE', created_at: new Date(), body: "/clear - Chatverlauf löschen\n/h [text], /hint [text] - [text] als auffälligen Hinweis darstellen\n/r [name], /remove [name] - die Fressstätte [name] entfernen\n/?, /help - verfügbare Befehle auflisten\n/r, /reset Teilnahmen zurücksetzen", privateFor: Meteor.user()._id, type: 'help'
 
     else if command.substring(0,3) == '/r ' || command.substring(0,8) == '/remove '
       Meteor.call 'removeVendor', command.replace(/^\/remove/,'').replace(/^\/r/,'').replace(/^[ \t]+/,'')
+
+    else if command == '/r' || command == '/reset'
+      Meteor.call 'resetParticipants'
 
     else
       # unknown command
