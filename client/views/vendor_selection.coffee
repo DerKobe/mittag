@@ -1,5 +1,5 @@
 Template.vendorSelection.nominatedVendors = ->
-  Vendors.find(nominated_at: { $exists: true })
+  Vendors.find(nominated_at: { $ne: null })
 
 Template.vendorSelection.anyVendorSelected = ->
   Session.get('selectedVendor')?
